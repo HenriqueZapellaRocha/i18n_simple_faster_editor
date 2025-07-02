@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../parse_tree/definitions/parsing_tree.h"
 
 void remove_spaces( char *line_file );
-void recognize_base_path( FILE *json_file );
+PARSING_TREE *recognize_base_path( FILE *json_file );
+void read_value( FILE *json_file, PARSING_TREE *root );
 
 void read_and_parse_json(const char *file_name) {
     FILE *json_file = fopen( file_name, "r" );
@@ -14,9 +16,16 @@ void read_and_parse_json(const char *file_name) {
         printf("ERROR: Can`t open this file");
         exit(-1);
     }
-    recognize_base_path(json_file);
+
+    PARSING_TREE *root = recognize_base_path(json_file);
+    read_value( json_file, root );
 
 } 
+
+void read_value( FILE *json_file, PARSING_TREE *root ){
+
+
+}
 
 void remove_spaces( char *line_file ) {
     int i = 0; int j = 0;
@@ -24,7 +33,7 @@ void remove_spaces( char *line_file ) {
 
     while ( line_file[i] != '\0' ) {
         char c = line_file[i];
-        if( c != ' ' &&  c != '\t' && c != '\n' ) { // space or tab
+        if( c != ' ' &&  c != '\t' && c != '\n' ) { // space or tab or enter
             new_buffer[j++] = c;
         }
         i++;
@@ -34,9 +43,11 @@ void remove_spaces( char *line_file ) {
     
 }
 
-void recognize_base_path( FILE *json_file ) {
+PARSING_TREE *recognize_base_path( FILE *json_file ) {
     char recognized_base_path_token = 0;
     char buffer[256];
+    PARSING_TREE *last_tree = NULL;
+    PARSING_TREE *root = NULL;
 
     while ( fread( buffer, sizeof(char), sizeof(buffer), json_file ) > 0 ) {
 
@@ -57,11 +68,16 @@ void recognize_base_path( FILE *json_file ) {
         }
 
         char *tokens = strtok(buffer, ".");
-        printf("%s", tokens);
-        while ((tokens = strtok(NULL, ".") ) != NULL) {
-            printf("\n%s", tokens);
+        if( last_tree == NULL ) {   
+            last_tree = create_tree(tokens, 1);
+            root = last_tree;
         }
-        
+        else
+            last_tree = add_children(tokens, 1, last_tree);
 
+        while ((tokens = strtok(NULL, ".") ) != NULL) {
+            last_tree = add_children(tokens, 1, last_tree);
+        }
     }
+    return root;
 }
