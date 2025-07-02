@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/henriquezapellarocha/Documents/i18nProject",
-      "program": "/Users/henriquezapellarocha/Documents/i18nProject/build/Debug/outDebug"
+      "cwd": "/Users/henriquezapellarocha/Documents/i18nProject/src/reader",
+      "program": "/Users/henriquezapellarocha/Documents/i18nProject/src/reader/build/Debug/outDebug"
     }
   ]
 }
