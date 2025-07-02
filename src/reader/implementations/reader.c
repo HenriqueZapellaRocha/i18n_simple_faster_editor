@@ -1,8 +1,8 @@
-#include "reader.h"
+#include "../definitions/reader.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../parse_tree/definitions/parsing_tree.h"
+#include "../../parse_tree/definitions/parsing_tree.h"
 
 void remove_spaces( char *line_file );
 PARSING_TREE *recognize_base_path( FILE *json_file );
