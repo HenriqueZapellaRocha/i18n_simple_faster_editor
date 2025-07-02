@@ -74,6 +74,10 @@
     "string": "c",
     "string_view": "c",
     "utility": "c",
-    "_types.h": "c"
+    "_types.h": "c",
+    "typeinfo": "cpp",
+    "version": "cpp",
+    "system_error": "cpp",
+    "parsing_tree.h": "c"
   }
 }
