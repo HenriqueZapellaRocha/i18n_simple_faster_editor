@@ -1,0 +1,39 @@
+base_path= *Just the base path**Just the base path**Just the base path**Just the base path**Just the base path**Just the base path**Just the base path**Just the base path*
+Just the base path of object*;base_path= *Just the base path of object*;base_path= *Just the base path of object*;base_path= ***
+Just the base path of object*;base_path= *Just the base path of object*;base_path= *Just the base path of object*;base_path= *Just the base path of object*;;
+
+
+"host": {
+  "common": {
+    "header": {
+      "hello": ("Hallo, ", "Hello, ", "Hola, ", "Bonjour, ", "Ciao, ", "Olá, "),
+      "announce": (
+        "RAUM ANBIETEN",       // Alemão
+        "OFFER SPACE",         // Inglês
+        "OFRECER ESPACIO",     // Espanhol
+        "PROPOSER UN ESPACE",  // Francês
+        "OFFRI SPAZIO",        // Italiano
+        "ANUNCIAR ESPAÇO"      // Português
+      ),
+      "find": {
+        "space": (
+          "RAUM FINDEN",       // Alemão
+          "FIND SPACE",        // Inglês
+          "ENCONTRAR ESPACIO", // Espanhol
+          "TROUVER UN ESPACE", // Francês
+          "TROVA SPAZIO",      // Italiano
+          "ENCONTRAR ESPAÇO"   // Português
+        ),
+        !override // <- says that value override a existing value in i18n objects
+        "login": (
+          "ANMELDEN",           // Alemão
+          "LOGIN",              // Inglês
+          "INICIAR SESIÓN",     // Espanhol
+          "SE CONNECTER",       // Francês
+          "ACCEDI",             // Italiano
+          "ENTRAR"              // Português
+        )
+      }
+    }
+  }
+}
