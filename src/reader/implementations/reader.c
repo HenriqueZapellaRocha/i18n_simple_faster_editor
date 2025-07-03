@@ -7,6 +7,7 @@
 void remove_spaces( char *line_file );
 PARSING_TREE *recognize_base_path( FILE *json_file );
 void read_value( FILE *json_file, PARSING_TREE *root );
+void print_node( PARSING_TREE *node ) ;
 
 void read_and_parse_json(const char *file_name) {
     FILE *json_file = fopen( file_name, "r" );
@@ -18,6 +19,10 @@ void read_and_parse_json(const char *file_name) {
     }
 
     PARSING_TREE *root = recognize_base_path(json_file);
+
+    printf("porra de rrot:\n");
+    print_node(root);
+    print_tree(root);
     read_value( json_file, root );
 
 } 
@@ -49,7 +54,7 @@ PARSING_TREE *recognize_base_path( FILE *json_file ) {
     PARSING_TREE *last_tree = NULL;
     PARSING_TREE *root = NULL;
 
-    while ( fread( buffer, sizeof(char), sizeof(buffer), json_file ) > 0 ) {
+    while (fscanf(json_file, "%255[^;];", buffer) == 1) {
 
         buffer[strcspn(buffer, "\n")] = '\0';
 
@@ -69,15 +74,32 @@ PARSING_TREE *recognize_base_path( FILE *json_file ) {
 
         char *tokens = strtok(buffer, ".");
         if( last_tree == NULL ) {   
-            last_tree = create_tree(tokens, 1);
+            last_tree = create_tree(tokens, '1');
             root = last_tree;
+            // print_node(last_tree);
         }
-        else
-            last_tree = add_children(tokens, 1, last_tree);
+        else {
+            last_tree = add_children(tokens, '1', last_tree);
+            print_node(last_tree);
+        }
 
         while ((tokens = strtok(NULL, ".") ) != NULL) {
-            last_tree = add_children(tokens, 1, last_tree);
+            last_tree = add_children(tokens, '1', last_tree);
+            print_node(last_tree);
         }
     }
     return root;
 }
+
+void print_node(PARSING_TREE *node) {
+    if (node == NULL) {
+        fprintf(stderr, "print_node: node é NULL!\n");
+        return;
+    }
+
+    printf("name: %s\n", node->name);
+    printf("childrens_len: %d\n", node->childrens_len);
+    printf("node_type_object: %c\n", node->node_type_object);
+
+}
+
