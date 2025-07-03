@@ -12,7 +12,6 @@ void print_node( PARSING_TREE *node ) ;
 void read_and_parse_json(const char *file_name) {
     FILE *json_file = fopen( file_name, "r" );
 
-    //@TODO: turn this on a malloc to read a complete line 
     if ( json_file == NULL ) {
         printf("ERROR: Can`t open this file");
         exit(-1);
@@ -53,9 +52,11 @@ PARSING_TREE *recognize_base_path( FILE *json_file ) {
     char buffer[256];
     PARSING_TREE *last_tree = NULL;
     PARSING_TREE *root = NULL;
+    char end = ' ';
 
-    while (fscanf(json_file, "%255[^;];", buffer) == 1) {
-
+    while (fscanf(json_file, "%255[^;]%c", buffer, &end)) {
+        printf("last valueeeeeee%c\n",end);
+        
         buffer[strcspn(buffer, "\n")] = '\0';
 
         if( !( recognized_base_path_token ) ) {
@@ -87,7 +88,9 @@ PARSING_TREE *recognize_base_path( FILE *json_file ) {
             last_tree = add_children(tokens, '1', last_tree);
             print_node(last_tree);
         }
+        if(end == ';') break;
     }
+
     return root;
 }
 

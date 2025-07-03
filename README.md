@@ -15,7 +15,7 @@ In that part conatins the objects and values to be added in i18n archives. The p
 
 Example: 
 ```
-"host": {
+value= "host": {
   "common": {
     "header": {
       "hello": ("Hallo, ", "Hello, ", "Hola, ", "Bonjour, ", "Ciao, ", "Olá, "),
@@ -48,6 +48,6 @@ Example:
       }
     }
   }
-}
+};
 
 ```
