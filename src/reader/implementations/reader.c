@@ -19,7 +19,7 @@ void read_and_parse_json(const char *file_name) {
 
     PARSING_TREE *root = recognize_base_path(json_file);
 
-    printf("porra de rrot:\n");
+    //@TODO retire debug prints
     print_node(root);
     print_tree(root);
     read_value( json_file, root );
@@ -55,7 +55,6 @@ PARSING_TREE *recognize_base_path( FILE *json_file ) {
     char end = ' ';
 
     while (fscanf(json_file, "%255[^;]%c", buffer, &end)) {
-        printf("last valueeeeeee%c\n",end);
         
         buffer[strcspn(buffer, "\n")] = '\0';
 
