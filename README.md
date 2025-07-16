@@ -26,7 +26,7 @@ value= "host": {
         "PROPOSER UN ESPACE",  // Francês
         "OFFRI SPAZIO",        // Italiano
         "ANUNCIAR ESPAÇO"      // Português
-      ),
+     ),
       "find": {
         "space": (
           "RAUM FINDEN",       // Alemão
@@ -35,7 +35,7 @@ value= "host": {
           "TROUVER UN ESPACE", // Francês
           "TROVA SPAZIO",      // Italiano
           "ENCONTRAR ESPAÇO"   // Português
-        ),
+       ),
         !override // <- says that value override a existing value in i18n objects
         "login": (
           "ANMELDEN",           // Alemão
@@ -44,7 +44,7 @@ value= "host": {
           "SE CONNECTER",       // Francês
           "ACCEDI",             // Italiano
           "ENTRAR"              // Português
-        )
+       )
       }
     }
   }

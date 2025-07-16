@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-PARSING_TREE *create_tree( char *name, char node_type ) {
+PARSING_TREE *create_tree(char *name, char node_type) {
     PARSING_TREE *parsing_tree = malloc(sizeof(PARSING_TREE));
     parsing_tree->name = strdup(name);
     parsing_tree->node_type_object = node_type;
@@ -13,7 +13,7 @@ PARSING_TREE *create_tree( char *name, char node_type ) {
     return parsing_tree;
 }
 
-PARSING_TREE *add_children( char *name, char node_type, PARSING_TREE *tree ) {
+PARSING_TREE *add_children(char *name, char node_type, PARSING_TREE *tree) {
 
     PARSING_TREE *new_children = malloc(sizeof(PARSING_TREE));
     new_children->name = strdup(name);
@@ -37,4 +37,19 @@ void print_tree(PARSING_TREE *tree) {
     for (int i = 0; i < tree->childrens_len; i++) {
         print_tree(tree->childrens[i]);
     }
+}
+
+PARSING_TREE *last_in_base_path(PARSING_TREE *root) {
+    PARSING_TREE *actual_node = root;
+    while (actual_node != NULL && actual_node->childrens != NULL) {
+        actual_node = actual_node->childrens[0];
+    }
+
+    if(actual_node == NULL) {
+        fprintf(stderr, "ERROR: while searching the last value in base path");
+        exit(1);
+    }
+
+    return actual_node;
+    
 }
