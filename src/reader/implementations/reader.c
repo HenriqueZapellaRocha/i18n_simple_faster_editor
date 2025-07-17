@@ -10,10 +10,11 @@ typedef unsigned char bool;
 
 void remove_spaces(char *line_file);
 PARSING_TREE *recognize_base_path(FILE *json_file);
-void read_value(FILE *json_file, PARSING_TREE *root, char *buffer[], char *recognized_value, char *end);
+int read_value(FILE *json_file, PARSING_TREE *root, char *buffer[], char *recognized_value, char *end);
 void print_node(PARSING_TREE *node);
 void state_machine_value_reader(FILE *json_file, PARSING_TREE *root);
-int value_or_object(char *buffer, PARSING_TREE *actual_node, bool *unfinished_read_value_name, bool *unfinished_read, char *unfinished_read_value_name_buffer[]);
+int value_or_object(char *buffer, PARSING_TREE *actual_node, bool *unfinished_read_value_name, bool *unfinished_read, 
+                                                                            char *unfinished_read_value_name_buffer[]);
 
 
 void read_and_parse_json(const char *file_name) {
@@ -34,13 +35,13 @@ void read_and_parse_json(const char *file_name) {
 
 } 
 
-void read_value(FILE *json_file, PARSING_TREE *root, char *buffer[], char *recognized_value, char *end){
+int read_value(FILE *json_file, PARSING_TREE *root, char *buffer[], char *recognized_value, char *end){
 
-    while(fscanf(json_file,"%255[^;]%c", buffer, &end)) {
+    if(fscanf(json_file,"%255[^;]%c", buffer, end) > - 1 ) {
         remove_spaces(buffer);
         buffer[strcspn(buffer, "\n")] = '\0';
 
-        if(!(recognized_value)) {
+        if(!(*recognized_value)) {
             char *key   = strtok(buffer, "=");
             char *value = strtok(NULL, "=");
 
@@ -48,11 +49,15 @@ void read_value(FILE *json_file, PARSING_TREE *root, char *buffer[], char *recog
                 printf("Value not specified or a error in writing!\nbase_path is mandatory, if you don`t want it use instead: base_path=");
                 exit(1);
             }
-            recognized_value = 1;
+            *recognized_value = 1;
             char base_path[256];
             strncpy(buffer, value, sizeof(base_path)-1);
             base_path[sizeof(base_path)-1] = '\0';
+
+            return 1;
         }
+    } else {
+        return 0;
     }
 }
 
@@ -67,21 +72,25 @@ void state_machine_value_reader(FILE *json_file, PARSING_TREE *root) {
 
     int i = 0;
 
-    while(i < sizeof(buffer) / sizeof(buffer[0])) {
-    switch (buffer[i])  {
-    case '\"':
-        i = start_value_object(&buffer[i+1], actual_object_node);
-        if(i == -1)
-            unfinished_read = true;
-        break;
+    while (read_value) {
     
-    default:
-        break;
-    } 
-}
+        while(i < sizeof(buffer) / sizeof(buffer[0])) {
+            switch (buffer[i])  {
+                case '\"':
+                    i = start_value_object(&buffer[i+1], actual_object_node);
+                    if(i == -1)
+                        unfinished_read = true;
+                    break;
+                
+                default:
+                    break;
+            } 
+        }
+    }
 }
 
-int value_or_object(char *buffer, PARSING_TREE *actual_node, bool *unfinished_read_value_name, bool *unfinished_read, char *unfinished_read_value_name_buffer[]) {
+int value_or_object(char *buffer, PARSING_TREE *actual_node, bool *unfinished_read_value_name, bool *unfinished_read, 
+                                                                                        char *unfinished_read_value_name_buffer[]) {
 
     size_t len = strlen(buffer);
     char *pos = strchr(buffer, "\"");
