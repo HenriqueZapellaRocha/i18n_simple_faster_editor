@@ -10,11 +10,11 @@ typedef unsigned char bool;
 
 void remove_spaces(char *line_file);
 PARSING_TREE *recognize_base_path(FILE *json_file);
-int read_value(FILE *json_file, PARSING_TREE *root, char *buffer[], char *recognized_value, char *end);
+int read_value(FILE *json_file, char *buffer, char *recognized_value, char *end);
 void print_node(PARSING_TREE *node);
 void state_machine_value_reader(FILE *json_file, PARSING_TREE *root);
 int value_or_object(char *buffer, PARSING_TREE *actual_node, bool *unfinished_read_value_name, bool *unfinished_read, 
-                                                                            char *unfinished_read_value_name_buffer[]);
+                                                                                        char *unfinished_read_value_name_buffer);
 
 
 void read_and_parse_json(const char *file_name) {
@@ -35,7 +35,7 @@ void read_and_parse_json(const char *file_name) {
 
 } 
 
-int read_value(FILE *json_file, PARSING_TREE *root, char *buffer[], char *recognized_value, char *end){
+int read_value(FILE *json_file, char *buffer, char *recognized_value, char *end){
 
     if(fscanf(json_file,"%255[^;]%c", buffer, end) > - 1 ) {
         remove_spaces(buffer);
@@ -56,28 +56,30 @@ int read_value(FILE *json_file, PARSING_TREE *root, char *buffer[], char *recogn
 
             return 1;
         }
-    } else {
-        return 0;
-    }
+    } 
+
+    return 0;
 }
 
 void state_machine_value_reader(FILE *json_file, PARSING_TREE *root) {
     PARSING_TREE *actual_object_node = last_in_base_path(root);
     char buffer[256];
     char unfinished_read_value_name_buffer[256];
-    char recognized_value = '0';
+    char *recognized_value; *recognized_value = '0';
     bool unfinished_read = false; // <- flag for the state when the value to be read at the moment is not complete in the actual
     bool unfinished_read_value_name = false;
-    char end = '0';
+    char *end; *end = '0';
 
     int i = 0;
 
-    while (read_value) {
+    while (read_value(json_file, buffer, recognized_value, end)) {
     
         while(i < sizeof(buffer) / sizeof(buffer[0])) {
             switch (buffer[i])  {
                 case '\"':
-                    i = start_value_object(&buffer[i+1], actual_object_node);
+                    i = value_or_object(&buffer[i+1], actual_object_node, 
+                        &unfinished_read_value_name,&unfinished_read, 
+                                                                                                unfinished_read_value_name_buffer);
                     if(i == -1)
                         unfinished_read = true;
                     break;
@@ -90,10 +92,10 @@ void state_machine_value_reader(FILE *json_file, PARSING_TREE *root) {
 }
 
 int value_or_object(char *buffer, PARSING_TREE *actual_node, bool *unfinished_read_value_name, bool *unfinished_read, 
-                                                                                        char *unfinished_read_value_name_buffer[]) {
+                                                                                        char *unfinished_read_value_name_buffer) {
 
     size_t len = strlen(buffer);
-    char *pos = strchr(buffer, "\"");
+    char *pos = strchr(buffer, '\"');
 
     if(pos != NULL) {
         int pos_index = pos - buffer;
@@ -104,7 +106,7 @@ int value_or_object(char *buffer, PARSING_TREE *actual_node, bool *unfinished_re
     else 
         return -1;
 
-    return;
+    return -1;
 }
 
 void remove_spaces(char *line_file) {

@@ -1,9 +1,10 @@
 #include "../definitions/simple_stack.h"
+#include "../../parse_tree/definitions/parsing_tree.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 
-void validate_send_stack(PARSING_TREE *value_pointer, SIMPLE_STACK *stack);
+void validate_sended_stack_and_initialize(PARSING_TREE *value_pointer, SIMPLE_STACK *stack) ;
 
 SIMPLE_STACK *add_value_in_stack(PARSING_TREE *value_pointer, SIMPLE_STACK *stack) {
     validate_sended_stack_and_initialize(value_pointer, stack);
@@ -33,7 +34,7 @@ void pop_value_from_stack(SIMPLE_STACK *stack) {
 }
 
 void validate_sended_stack_and_initialize(PARSING_TREE *value_pointer, SIMPLE_STACK *stack) {
-        if (stack == NULL) 
+        if(stack == NULL) 
             printf(stderr, "error in stack, given a NULL stack");
             exit(1);
         if (&value_pointer == NULL || value_pointer == NULL)
